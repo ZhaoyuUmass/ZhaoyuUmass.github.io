@@ -74,10 +74,3 @@ function run(value, field, querier) {
 	return value;
 }
 ```
-
-
-
-## Prohibitions
-Any method that may bring harm to Active GNS system are all forbidden. The misbehavior we could identified right now are listed below. Please do not make the following calls as it may lead to a punishment if your misbehavior is detected.
-* Active GNS do not allow customer code call Java native class, even though the Javascript code running in Nashorn could call the method of Java native class through Java.type and Java.extend methods. But we disable Java hooks in global scope by using "--no-java" flag when Nashorn script engine is initialized. Therefore, if the customer code contains Java native class, the code execution will result in failure.
-* Active GNS has no way to prevent customer code to allocating a huge amount of memory, and thus causing Active GNS worker JVM throws an OutOfMemoryError and terminates immediately. Please do not try to use your code to misbehave in this way. Such a misbehavior will lead to a severe result as customer guid will be blacklisted immediately as soon as it is detected.
