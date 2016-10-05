@@ -28,9 +28,10 @@ To run the client with no-op active code, use the following command:
 bin/gpClient.sh \
 edu.umass.cs.gnsclient.client.testing.activecode.ActiveCodeHelloWorldExample
 ```
-This no-op active code returns the original value of the field without any change, the output should look like:
->Before the code is deployed, the value of field(someField) is someValue
->After the code is deployed, the value of field(someField) is someValue
+This no-op active code returns the original value of the field without any change, the end of the output should look like:
+>...
+>Before the code is deployed, the value of field(someField) is original value
+>After the code is deployed, the value of field(someField) is original value
 
 To run another simple hello world active code, you could specify the path to the code and run as:
 ```bash
@@ -39,15 +40,22 @@ edu.umass.cs.gnsclient.client.testing.activecode.ActiveCodeHelloWorldExample \
 scripts/activeCode/HelloWorld.js
 ```
 
-This code changes the original value of the field, and returns a new value as a String "hello world!". Its output should look like:
->Before the code is deployed, the value of field(someField) is someValue
+This code changes the original value of the field, and returns a new value as a String "hello world!". The end of the output should look like:
+>...
+>Before the code is deployed, the value of field(someField) is original value
 >After the code is deployed, the value of field(someField) is hello world!
 
-## Performance Test
-You could use another client to test ActiveGNS throughput as:
+## Throughput Test
+After you have run the hello world example with no-op active code as shown above, you could test the throughput for no-op active code as:
 ```bash
-bin/gpClient.sh edu.umass.cs.gnsclient.client.testing.GNSClientCapacityTest true
+bin/gpClient.sh edu.umass.cs.gnsclient.client.testing.activecode.CapacityTestForThruputClient \
+NUM_REQUESTS=400000
 ```
+This test sends 400000 requests to saturate the server and the end of the test shows the unsigned read rate as:
+>...
+>parallel_unsigned_read_rate=5.7K/s
+
+It's more meaningful to run server and client on separate physical machines to test the system throughput, the detail about how to run GNS with distributed settings, please refer to [GNS documentation](https://mobilityfirst.github.io/documentation/).
 
 ## More active code examples
 The active code supported by ActiveGNS should be written in Javascript, and it must implement the following function:
@@ -59,10 +67,10 @@ function run(value, field, querier) {
 where _field_ is a string, _value_ is a [JSONObject](http://docs.oracle.com/javaee/7/api/javax/json/JsonObject.html) with the queried field and its corresponding value in it,  _querier_ is an object which allows user-defined code to query some other users field. 
 _querier_ is a Java object with two public methods available for the user:
 ```Java
-ValuesMap readGuid(String guid, String field) throws ActiveException;
-void writeGuid(String guid, String field, ValuesMap value) throws ActiveException;
+JSONObject readGuid(String guid, String field) throws ActiveException;
+void writeGuid(String guid, String field, JSONObject value) throws ActiveException;
 ```
-The type ValuesMap is an extension of JSONObject, see [ValuesMap](https://github.com/MobilityFirst/GNS/blob/master/src/edu/umass/cs/gnsserver/utils/ValuesMap.java) for the details. 
+The type JSONObject is Json which can be , 
 * _readGuid_ allows customer's Javascript code to read the value of _field_, from _guid_. The parameter _guid_ could be the same as customer's own GUID, and it does not require any ACL check to read the value of _field_. If _guid_ is different from the customer's own GUID, the customer must make sure he is permitted to read the _field_ . Otherwise, he will get an exception to indicate that the read operation is not allowed.
 * The method _writeGuid_ allows customer's code to write _value_ into _field_ of _guid_. If the parameter _guid_ is the same as customer's own GUID, then there is no need for ACL check, and the _field_ will be updated. If _guid_ is different from the customer's own GUID, the customer must make sure he is permitted to write into the _field_ of _guid_. Otherwise, he will get an exception to indicate that the write operation is not allowed.
 
