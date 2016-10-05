@@ -30,7 +30,9 @@ edu.umass.cs.gnsclient.client.testing.activecode.ActiveCodeHelloWorldExample
 ```
 This no-op active code returns the original value of the field without any change, the end of the output should look like:
 >...
+
 >Before the code is deployed, the value of field(someField) is original value
+
 >After the code is deployed, the value of field(someField) is original value
 
 To run another simple hello world active code, you could specify the path to the code and run as:
@@ -42,7 +44,9 @@ scripts/activeCode/HelloWorld.js
 
 This code changes the original value of the field, and returns a new value as a String "hello world!". The end of the output should look like:
 >...
+
 >Before the code is deployed, the value of field(someField) is original value
+
 >After the code is deployed, the value of field(someField) is hello world!
 
 ## Throughput Test
@@ -53,6 +57,7 @@ NUM_REQUESTS=400000
 ```
 This test sends 400000 requests to saturate the server and the end of the test shows the unsigned read rate as:
 >...
+
 >parallel_unsigned_read_rate=5.7K/s
 
 It's more meaningful to run server and client on separate physical machines to test the system throughput, the detail about how to run GNS with distributed settings, please refer to [GNS documentation](https://mobilityfirst.github.io/documentation/).
