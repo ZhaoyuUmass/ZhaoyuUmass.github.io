@@ -60,7 +60,14 @@ This test sends 400000 requests to saturate the server and the end of the test s
 
 >parallel_unsigned_read_rate=5.7K/s
 
-It's more meaningful to run server and client on separate physical machines to test the system throughput, the detail about how to run GNS with distributed settings, please refer to [GNS documentation](https://mobilityfirst.github.io/documentation/).
+
+To test it in a loop with 20 runs, use the script as below:
+```bash
+./scripts/loop
+"bin/gpClient.sh edu.umass.cs.gnsclient.client.testing.activecode.CapacityTestForThruputClient \
+NUM_REQUESTS=400000"
+```
+NOTE: It's more meaningful to run server and client on separate physical machines to test the system throughput, the detail about how to run GNS with distributed settings, please refer to [GNS documentation](https://mobilityfirst.github.io/documentation/).
 
 ## More active code examples
 The active code supported by ActiveGNS should be written in Javascript, and it must implement the following function:
