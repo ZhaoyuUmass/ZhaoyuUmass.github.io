@@ -69,7 +69,18 @@ NUM_REQUESTS=400000"
 ```
 NOTE: It's more meaningful to run server and client on separate physical machines to test the system throughput, the detail about how to run GNS with distributed settings, please refer to [GNS documentation](https://mobilityfirst.github.io/documentation/).
 
-## More active code examples
+## Stop Server
+To stop the running server, use the following command:
+```bash
+bin/gpServer.sh stop all
+```
+
+You can also clear the data being written into database with the following command:
+```bash
+bin/gpServer.sh clear all
+```
+
+## Active code
 The active code supported by ActiveGNS should be written in Javascript, and it must implement the following function:
 ```Javascript
 function run(value, field, querier) {
@@ -77,20 +88,6 @@ function run(value, field, querier) {
 }
 ```
 where _field_ is a string, _value_ is a [JSONObject](http://docs.oracle.com/javaee/7/api/javax/json/JsonObject.html) with the queried field and its corresponding value in it,  _querier_ is an object which allows user-defined code to query some other users field. 
-_querier_ is a Java object with two public methods available for the user:
-```Java
-JSONObject readGuid(String guid, String field) throws ActiveException;
-void writeGuid(String guid, String field, JSONObject value) throws ActiveException;
-```
-The type JSONObject is Json which can be , 
-* _readGuid_ allows customer's Javascript code to read the value of _field_, from _guid_. The parameter _guid_ could be the same as customer's own GUID, and it does not require any ACL check to read the value of _field_. If _guid_ is different from the customer's own GUID, the customer must make sure he is permitted to read the _field_ . Otherwise, he will get an exception to indicate that the read operation is not allowed.
-* The method _writeGuid_ allows customer's code to write _value_ into _field_ of _guid_. If the parameter _guid_ is the same as customer's own GUID, then there is no need for ACL check, and the _field_ will be updated. If _guid_ is different from the customer's own GUID, the customer must make sure he is permitted to write into the _field_ of _guid_. Otherwise, he will get an exception to indicate that the write operation is not allowed.
+Learn how to deploy your code on a certain action, refer to the aforementioned [Hello World example](https://github.com/ZhaoyuUmass/ActiveGNS/blob/master/src/edu/umass/cs/gnsclient/client/testing/activecode/ActiveCodeHelloWorldExample.java).
 
-A use example of these two methods is like:
-```Javascript
-function run(value, field, querier) {
-    var newValue = querier.readGuid("guid", "field");
-    querier.writeGuid(null, "myField");
-	return value;
-}
-```
+## 
