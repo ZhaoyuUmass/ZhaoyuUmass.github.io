@@ -19,8 +19,13 @@ edu.umass.cs.gnsclient.client.testing.activecode.TestActiveCodeRemoteQueryClient
 ```
 There are four tests for remote query, and all tests should pass with the output like:
 > ...
+
 > Depth query test(a read followed by a read) succeeds!
+
 > Depth query test(a write followed by a read) succeeds!
+
 > ...
+
 > Depth query test(a write followed by a read) succeeds!
+
 > Depth query test(a write followed by a write) succeeds!
